@@ -19,5 +19,8 @@ $app->get('/redis', function() use($app) {
     return var_export($app['predis']->info(), true);
 }); 
 
+$app->get('/err', function() use($app) { 
+    return $coucou;
+}); 
 $app->run(); 
 
