@@ -1,7 +1,7 @@
 {
     "require": {
-        "silex/silex": "~1.0",
-        "predis/service-provider": "dev-master"
+        "silex/silex": "~1.2",
+        "predis/service-provider": "~1.0"
     },
     "require-dev": {
         "phpspec/prophecy": "~1.0",
