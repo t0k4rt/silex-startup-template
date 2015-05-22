@@ -16,8 +16,7 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => 'php://stdout',
 ));
 
-$app->get('/', function() use($app) { 
-    $app['monolog']->addInfo("log test");
+$app->get('/', function() use($app) {
     return 'Hello World'; 
 }); 
 
@@ -25,8 +24,23 @@ $app->get('/redis', function() use($app) {
     return var_export($app['predis']->info(), true);
 }); 
 
-$app->get('/err', function() use($app) { 
-    return $coucou;
+$app->get('/log/{type}', function($type) use($app) {
+    switch ($type) {
+        case "info":
+            $app['monolog']->addInfo("Test is an info");
+            break;
+        case "debug":
+            $app['monolog']->addDebug("Test is a debug");
+            break;
+        case "warning":
+            $app['monolog']->addWarning("Test is a warning");
+            break;
+        case "error":
+            $app['monolog']->addInfo("Test is an error");
+            break;
+            
+    }
+    
 }); 
 $app->run(); 
 
