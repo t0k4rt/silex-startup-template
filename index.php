@@ -2,6 +2,7 @@
 require_once __DIR__.'/vendor/autoload.php'; 
 
 $app = new Silex\Application(); 
+$app['debug'] = true;
 
 $app->register(new Predis\Silex\ClientServiceProvider(), [
     'predis.parameters' => 'tcp://redis:6379',
@@ -11,7 +12,12 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
     ],
 ]);
 
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.logfile' => 'php://stdout',
+));
+
 $app->get('/', function() use($app) { 
+    $app['monolog']->addInfo("log test");
     return 'Hello World'; 
 }); 
 
