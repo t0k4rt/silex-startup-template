@@ -22,7 +22,7 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 // Add another handler to deal with errors >= WARNING
 $app['monolog'] = $app->share($app->extend('monolog', function($monolog, $app) {
     $handler = new StreamHandler('php://stderr', Monolog\Logger::WARNING);
-    $log->pushHandler($handler);
+    $monolog->pushHandler($handler);
     return $monolog;
 }));
 
