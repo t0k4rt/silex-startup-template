@@ -1,6 +1,8 @@
 <?php 
 require_once __DIR__.'/vendor/autoload.php'; 
 
+use Monolog\Handler\StreamHandler;
+
 $app = new Silex\Application(); 
 $app['debug'] = true;
 
@@ -12,9 +14,17 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
     ],
 ]);
 
+// default monolog
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => 'php://stdout',
 ));
+
+// Add another handler to deal with errors >= WARNING
+$app['monolog'] = $app->share($app->extend('monolog', function($monolog, $app) {
+    $handler = new StreamHandler('php://stderr', Monolog\Logger::WARNING);
+    $log->pushHandler($handler);
+    return $monolog;
+}));
 
 $app->get('/', function() use($app) {
     return 'Hello World'; 
@@ -27,16 +37,16 @@ $app->get('/redis', function() use($app) {
 $app->get('/log/{type}', function($type) use($app) {
     switch ($type) {
         case "info":
-            $app['monolog']->addInfo("Test is an info");
+            $app['monolog']->addInfo("This is an info");
             break;
         case "debug":
-            $app['monolog']->addDebug("Test is a debug");
+            $app['monolog']->addDebug("This is a debug");
             break;
         case "warning":
-            $app['monolog']->addWarning("Test is a warning");
+            $app['monolog']->addWarning("This is a warning");
             break;
         case "error":
-            $app['monolog']->addError("Test is an error");
+            $app['monolog']->addError("This is an error");
             break;
     }
     return 'Sent a log to std';
