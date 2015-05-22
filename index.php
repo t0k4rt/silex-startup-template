@@ -36,11 +36,10 @@ $app->get('/log/{type}', function($type) use($app) {
             $app['monolog']->addWarning("Test is a warning");
             break;
         case "error":
-            $app['monolog']->addInfo("Test is an error");
+            $app['monolog']->addError("Test is an error");
             break;
-            
     }
-    
+    return 'Sent a log to std';
 }); 
 $app->run(); 
 
