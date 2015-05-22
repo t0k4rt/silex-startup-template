@@ -1,6 +1,6 @@
 <?php 
 require_once __DIR__.'/vendor/autoload.php'; 
-
+return error;
 $app = new Silex\Application(); 
 $app['debug'] = true;
 
