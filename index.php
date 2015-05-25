@@ -34,6 +34,13 @@ $app->get('/redis', function() use($app) {
     return var_export($app['predis']->info(), true);
 }); 
 
+
+$app->get('/postgres', function() use($app) { 
+    $dbconn = pg_connect("host=localhost dbname=publishing user=www password=foo");
+    $app['monolog']->addInfo(pg_connection_status($dbconn));
+    return var_export(pg_version($dbconn), true); 
+}); 
+
 $app->get('/log/{type}', function($type) use($app) {
     switch ($type) {
         case "info":
