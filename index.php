@@ -15,7 +15,11 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
 ]);
 
 // default monolog
-$app->register(new Silex\Provider\MonologServiceProvider());
+$app->register(new Silex\Provider\MonologServiceProvider(), 
+    array(
+        'monolog.logfile' => 'php://stdout',
+    )
+);
 
 // Add another handler to deal with errors >= WARNING
 $app['monolog'] = $app->share($app->extend('monolog', function($monolog, $app) {
