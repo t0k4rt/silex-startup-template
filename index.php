@@ -15,14 +15,22 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
 ]);
 
 // default monolog
-$app->register(new Silex\Provider\MonologServiceProvider(), array(
-    'monolog.logfile' => 'php://stdout',
-));
+$app->register(new Silex\Provider\MonologServiceProvider());
 
 // Add another handler to deal with errors >= WARNING
 $app['monolog'] = $app->share($app->extend('monolog', function($monolog, $app) {
-    $handler = new StreamHandler('php://stderr', Monolog\Logger::WARNING);
-    $monolog->pushHandler($handler);
+    // remove default handler
+    $monolog->popHandler();
+    
+    // create filterhandler and redirect log message to either stderr or stdout
+    $errHandler = new StreamHandler('php://stderr', Monolog\Logger::WARNING);
+    $filterErrHandler = new FilterHandler($errHandler, Monolog\Logger::WARNING, Monolog\Logger::EMERGENCY);
+    $monolog->pushHandler($filterErrHandler);
+    
+    $infoHandler = new StreamHandler('php://stdout');
+    $filterInfoHandler = new FilterHandler($infoHandler, Monolog\Logger::DEBUG, Monolog\Logger::NOTICE);
+    $monolog->pushHandler($filterInfoHandler);
+    
     return $monolog;
 }));
 
