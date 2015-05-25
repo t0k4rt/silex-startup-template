@@ -2,6 +2,7 @@
 require_once __DIR__.'/vendor/autoload.php'; 
 
 use Monolog\Handler\StreamHandler;
+use Monolog\Handler\FilterHandler;
 
 $app = new Silex\Application(); 
 $app['debug'] = true;
