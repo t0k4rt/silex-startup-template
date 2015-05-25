@@ -36,7 +36,7 @@ $app->get('/redis', function() use($app) {
 
 
 $app->get('/postgres', function() use($app) { 
-    $dbconn = pg_connect("host=localhost dbname=publishing user=www password=foo");
+    $dbconn = pg_connect("host=pgsql dbname=silex user=silex password=silex");
     $app['monolog']->addInfo(pg_connection_status($dbconn));
     return var_export(pg_version($dbconn), true); 
 }); 
